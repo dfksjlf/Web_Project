@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> 노인인재 재활문제3 </title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 400px;
+      height: 400px;
+      table-layout: fixed;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+    }
+
+    th,
+    td {
+      width: 100px;
+      height: 100px;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+      cursor: pointer;
+    }
+
+    .mistake {
+      background-color: red;
+      color: white;
+    }
+
+    .move {
+      border: none;
+      cursor: pointer;
+      border-radius: 15%;
+      background-color: skyblue;
+      padding: 15px 50px;
+      margin-top: 10px;
+    }
+
+    #next {
+      position: absolute;
+      margin-left: 55%;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <h4>1. 369 게임의 규칙을 보고 숫자에 맞게 <u><strong>V표시</strong></u>를 해보세요.</h4>
+  </div>
+  <div align="center" style="width:60%; height: 120px; border: 2px solid black; border-radius: 2em;">
+    <규칙><br>
+      <br>
+      3, 6, 9가 들어간 숫자에 모두 V 표시를 합니다.<br>
+      예&#41; 30은 <span style="color: red;">V 1번</span> <span style="color: black;">33은</span> <span style="color: red;">
+        V V 2번 </span>
+  </div>
+  <br>
+  <br>
+  <table>
+    <tr>
+      <td onclick="toggleSelection(this)">15</td>
+      <td onclick="toggleSelection(this)">16</td>
+      <td onclick="toggleSelection(this)">17</td>
+      <td onclick="toggleSelection(this)">18</td>
+      <td onclick="toggleSelection(this)">19</td>
+      <td onclick="toggleSelection(this)">20</td>
+      <td onclick="toggleSelection(this)">21</td>
+      <td onclick="toggleSelection(this)">22</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">23</td>
+      <td onclick="toggleSelection(this)">24</td>
+      <td onclick="toggleSelection(this)">25</td>
+      <td onclick="toggleSelection(this)">26</td>
+      <td onclick="toggleSelection(this)">27</td>
+      <td onclick="toggleSelection(this)">28</td>
+      <td onclick="toggleSelection(this)">29</td>
+      <td onclick="toggleSelection(this)">30</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">31</td>
+      <td onclick="toggleSelection(this)">32</td>
+      <td onclick="toggleSelection(this)">33</td>
+      <td onclick="toggleSelection(this)">34</td>
+      <td onclick="toggleSelection(this)">35</td>
+      <td onclick="toggleSelection(this)">36</td>
+      <td onclick="toggleSelection(this)">37</td>
+      <td onclick="toggleSelection(this)">38</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">39</td>
+      <td onclick="toggleSelection(this)">40</td>
+      <td onclick="toggleSelection(this)">41</td>
+      <td onclick="toggleSelection(this)">42</td>
+      <td onclick="toggleSelection(this)">43</td>
+      <td onclick="toggleSelection(this)">44</td>
+      <td onclick="toggleSelection(this)">45</td>
+      <td onclick="toggleSelection(this)">46</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">47</td>
+      <td onclick="toggleSelection(this)">48</td>
+      <td onclick="toggleSelection(this)">49</td>
+      <td onclick="toggleSelection(this)">50</td>
+      <td onclick="toggleSelection(this)">51</td>
+      <td onclick="toggleSelection(this)">52</td>
+      <td onclick="toggleSelection(this)">53</td>
+      <td onclick="toggleSelection(this)">54</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">55</td>
+      <td onclick="toggleSelection(this)">56</td>
+      <td onclick="toggleSelection(this)">57</td>
+      <td onclick="toggleSelection(this)">58</td>
+      <td onclick="toggleSelection(this)">59</td>
+      <td onclick="toggleSelection(this)">60</td>
+      <td onclick="toggleSelection(this)">61</td>
+      <td onclick="toggleSelection(this)">62</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">63</td>
+      <td onclick="toggleSelection(this)">64</td>
+      <td onclick="toggleSelection(this)">65</td>
+      <td onclick="toggleSelection(this)">66</td>
+      <td onclick="toggleSelection(this)">67</td>
+      <td onclick="toggleSelection(this)">68</td>
+      <td onclick="toggleSelection(this)">69</td>
+      <td onclick="toggleSelection(this)">70</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">71</td>
+      <td onclick="toggleSelection(this)">72</td>
+      <td onclick="toggleSelection(this)">73</td>
+      <td onclick="toggleSelection(this)">74</td>
+      <td onclick="toggleSelection(this)">75</td>
+      <td onclick="toggleSelection(this)">76</td>
+      <td onclick="toggleSelection(this)">77</td>
+      <td onclick="toggleSelection(this)">78</td>
+    </tr>
+    <tr>
+      <td onclick="toggleSelection(this)">79</td>
+      <td onclick="toggleSelection(this)">80</td>
+      <td onclick="toggleSelection(this)">81</td>
+      <td onclick="toggleSelection(this)">82</td>
+      <td onclick="toggleSelection(this)">83</td>
+      <td onclick="toggleSelection(this)">84</td>
+      <td onclick="toggleSelection(this)">85</td>
+      <td onclick="toggleSelection(this)">86</td>
+    </tr>
+  </table>
+
+  <script>
+    let mistakes = 0;
+
+    function toggleSelection(cell) {
+      const text = cell.textContent;
+      const contains369 = /[369]/.test(text);
+
+      if (contains369) {
+        if (text.includes("VV")) {
+          cell.textContent = text.replace("VV", "").trim();
+        } else if (text.includes("V")) {
+          cell.textContent = text.replace("V", "VV");
+        } else {
+          cell.textContent += " V";
+        }
+      } else {
+        mistakes++;
+        cell.classList.add("mistake");
+
+        if (mistakes >= 3) {
+          alert("3번 틀렸습니다! 문제가 리셋됩니다.");
+          resetGame();
+        } else {
+          alert("틀린 숫자입니다!");
+        }
+      }
+
+      checkWin();
+    }
+
+    function resetGame() {
+      mistakes = 0;
+      const cells = document.querySelectorAll("td");
+      cells.forEach(cell => {
+        cell.textContent = cell.textContent.replace(/V+/g, "").trim();
+        cell.classList.remove("mistake");
+      });
+    }
+
+    function count369(text) {
+      return (text.match(/[369]/g) || []).length;
+    }
+
+    function checkWin() {
+      const cells = document.querySelectorAll("td");
+      let allCorrect = true;
+
+      cells.forEach(cell => {
+        const text = cell.textContent.replace(/V/g, '').trim();
+        const num369 = count369(text);
+        const currentVCount = (cell.textContent.match(/V/g) || []).length;
+
+        if (num369 > 0 && currentVCount !== num369) {
+          allCorrect = false;
+        } else if (num369 === 0 && currentVCount > 0) {
+          allCorrect = false;
+        }
+      });
+
+      if (allCorrect) {
+        alert("모두 맞았습니다!");
+        
+        if (!document.querySelector('.move')) {
+            const buttonContainer = document.createElement("div");
+            buttonContainer.innerHTML = `
+                <button class="move" id="back" onclick="location.href='quize2.html'">이전</button>
+                <button class="move" id="next" onclick="location.href='quize4.html'">다음</button>
+            `;
+            document.body.appendChild(buttonContainer);
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>

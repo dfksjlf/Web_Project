@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 노인인재 재활문제4 </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+        .question {
+            margin: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+        .options {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        #timer {
+            font-weight: bold;
+            color: red;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .section {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .section-lightgreen {
+            background-color: #ccffcc;
+        }
+        .section-white {
+            background-color: #ffffff;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        #submit-btn {
+            margin: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #submit-btn:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        .result-message {
+            font-size: 24px;
+        }
+        .background-white {
+            background-color: #ffffff;
+        }
+
+        .move {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>빠진 도형 찾기</h1>
+    <div id="quiz-container"></div>
+    <button id="submit-btn" onclick="submitAnswer()">다음</button>
+
+    <script>
+        const questions = [
+            { 
+                questionNumber: "1. ", 
+                question: "<보기 1>", 
+                imageSrc1: "https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/1.jpg",
+                question2: "<보기 2>", 
+                imageSrc2: ["https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/1-1.jpg"],
+                options: ["1개", "2개", "3개", "4개"], 
+                answer: 0 
+            },
+            { 
+                questionNumber: "2. ", 
+                question: "<보기 1>", 
+                imageSrc1: "https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/2.jpg",
+                question2: "<보기 2>", 
+                imageSrc2: ["https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/2-1.jpg"],
+                options: ["1개", "2개", "3개", "4개"], 
+                answer: 0 
+            },
+            { 
+                questionNumber: "3. ", 
+                question: "<보기 1>", 
+                imageSrc1: "https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/3.jpg",
+                question2: "<보기 2>", 
+                imageSrc2: ["https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/3-1.jpg"],
+                options: ["1개", "2개", "3개", "4개"], 
+                answer: 1 
+            },
+            { 
+                questionNumber: "4. ", 
+                question: "<보기 1>", 
+                imageSrc1: "https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/4.jpg",
+                question2: "<보기 2>", 
+                imageSrc2: ["https://raw.githubusercontent.com/wkzls/project/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/4-1.jpg"],
+                options: ["1개", "2개", "3개", "4개"], 
+                answer: 1 
+            }
+        ];
+        let currentQuestionIndex = 0;
+        let timer;
+        let timeLimit = 60;
+        let score = 0;
+        let results = [];
+
+        function startTimer() {
+            let timeLeft = timeLimit;
+            document.getElementById('timer').textContent = `남은 시간 ${timeLeft}초`;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `남은 시간 ${timeLeft}초`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    markUnanswered();
+                    submitAnswer(true);
+                }
+            }, 1000);
+        }
+
+        function displayQuestion(index) {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = '';
+            if (index < questions.length) {
+                const q = questions[index];
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div id="timer"></div>
+                    <div class="section section-lightgreen">
+                        <p class="section-title">${q.questionNumber}${q.question}을 보고 ${q.question2}에 빠진 도형이 몇 개인지 고르시오. (25점)</p>
+                    </div>
+                    <div class="section section-white">
+                        <p class="section-title">${q.question}</p>
+                        <img src="${q.imageSrc1}" alt="보기 이미지" class="image">
+                    </div>
+                    <div class="section section-white background-white">
+                        <p class="section-title">${q.question2}</p>
+                        <div class="image-container">
+                            ${q.imageSrc2.map((image, idx) => `
+                                <img src="${image}" alt="${q.question2} 이미지 ${idx + 1}" class="image">
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="section section-white">
+                        <div class="options">
+                            ${q.options.map((option, i) => `
+                                <label class="option">
+                                    <input type="radio" name="question${index}" value="${i}">
+                                    <span>${option}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <p id="error${index}" class="error-message hidden">정답을 선택해 주세요</p>
+                `;
+                quizContainer.appendChild(questionDiv);
+                startTimer();
+            } else {
+                displayResults();
+            }
+        }
+
+        function markUnanswered() {
+            results.push(`${currentQuestionIndex + 1}번 문제: 미제출입니다.`);
+        }
+
+        function submitAnswer(isTimeout = false) {
+            clearInterval(timer);
+            const q = questions[currentQuestionIndex];
+            const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
+            const errorElement = document.getElementById(`error${currentQuestionIndex}`);
+            if (selectedOption || isTimeout) {
+                if (!isTimeout) {
+                    const answerIndex = parseInt(selectedOption.value);
+                    if (answerIndex === q.answer) {
+                        score++;
+                        results.push(`${currentQuestionIndex + 1}번 문제: 정답입니다.`);
+                    } else {
+                        results.push(`${currentQuestionIndex + 1}번 문제: 오답입니다.`);
+                    }
+                    errorElement.classList.add('hidden');
+                }
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion(currentQuestionIndex);
+                } else {
+                    displayResults();
+                }
+            } else {
+                errorElement.classList.remove('hidden');
+            }
+        }
+
+        function displayResults() {
+            document.body.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
+                    <div style="text-align: center;">
+                        ${results.map((result) => `<p>${result}</p>`).join('')}
+                        <p class="result-message">당신의 점수는 ${score * 25}/100 입니다</p>
+                        <button onclick="restartQuiz()">다시하기</button>
+                        <div>
+                            <button class="move" onclick=" location.href='quize3.html' "> 이전 </button>
+                            <button class="move" onclick=" location.href='end.html' "> 다음 </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            results = [];
+            document.body.innerHTML = `
+                <h1>빠진 도형 찾기</h1>
+                <div id="quiz-container"></div>
+                <button id="submit-btn" onclick="submitAnswer()">다음</button>
+            `;
+            displayQuestion(currentQuestionIndex);
+        }
+
+        window.onload = function() {
+            displayQuestion(currentQuestionIndex);
+        };
+    </script>
+</body>
+</html>

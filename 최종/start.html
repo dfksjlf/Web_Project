@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 노인인재 재활문제 </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url("https://github.com/dfksjlf/Web_Project/raw/main/%EC%9D%B4%EB%AF%B8%EC%A7%80/start.png");
+            background-repeat: no-repeat;
+            background-size: 50%;
+        }
+
+        .button {
+            display: block;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bolder;
+            border-radius: 5%;
+            background-color: skyblue;
+
+            margin-left: 150px;
+            margin-top: 10px;
+        }
+
+        #move {
+            padding: 20px 80px;
+            margin-top: 390px;
+        }
+
+        #close {
+            padding: 20px 90px;
+            margin-top: 30px;
+
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <button class="button" id="move"  type="button" onclick=" location.href='quize1.html' "> 시작하기 </button> 
+        <button class="button" id="close" type="button"> 나가기 </button>
+    </div>
+
+    <script>
+        const $button = document.querySelector('#close');
+
+        const WindowClose = (event) => {
+            if (window.confirm('창을 닫으시겠습니까?')) {
+                window.open('', '_self', '');
+                window.close();
+                if (!window.closed) {
+                    alert('브라우저 설정으로 인해 창을 자동으로 닫을 수 없습니다. 창을 수동으로 닫아주세요.');
+                }
+            }
+        }
+
+        $button.addEventListener('click', WindowClose);
+    </script>
+</body>
+</html>
